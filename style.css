@@ -1,0 +1,581 @@
+/* Design System Variables */
+:root {
+    --color-gold: #c5a880;
+    --color-gold-dark: #a68a62;
+    --color-dark-chocolate: #261c14;
+    --color-cream: #fbf9f6;
+    --color-white: #ffffff;
+    --color-text-muted: #6e655f;
+    --font-luxury: 'Cinzel', serif;
+    --font-clean: 'Montserrat', sans-serif;
+    --transition-smooth: cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+/* Reset Global */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--color-cream);
+    color: var(--color-dark-chocolate);
+    font-family: var(--font-clean);
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* Header Fixo */
+.main-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: rgba(251, 249, 246, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 500;
+    border-bottom: 1px solid rgba(197, 168, 128, 0.2);
+}
+
+.header-container {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand-logo {
+    font-family: var(--font-luxury);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-dark-chocolate);
+    text-decoration: none;
+    letter-spacing: 2px;
+}
+
+.main-nav a {
+    color: var(--color-dark-chocolate);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin: 0 15px;
+    letter-spacing: 1px;
+    transition: color 0.3s ease;
+}
+
+.main-nav a:hover {
+    color: var(--color-gold);
+}
+
+.cart-trigger {
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    color: var(--color-dark-chocolate);
+}
+
+.cart-badge {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background-color: var(--color-gold);
+    color: var(--color-white);
+    font-size: 0.75rem;
+    font-weight: 700;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Hero Section */
+.hero-section {
+    position: relative;
+    height: 85vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    background: url('https://images.unsplash.com/photo-1541783245831-57d6fb0926d3?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+    padding: 0 20px;
+}
+
+.hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(38, 28, 20, 0.7), rgba(38, 28, 20, 0.4));
+}
+
+.hero-content {
+    position: relative;
+    z-index: 10;
+    max-width: 800px;
+    color: var(--color-white);
+}
+
+.hero-subtitle {
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    color: var(--color-gold);
+    display: block;
+    margin-bottom: 15px;
+}
+
+.hero-title {
+    font-family: var(--font-luxury);
+    font-size: 3.5rem;
+    font-weight: 500;
+    line-height: 1.2;
+    margin-bottom: 25px;
+    letter-spacing: 2px;
+}
+
+.hero-lead {
+    font-size: 1.1rem;
+    font-weight: 300;
+    line-height: 1.6;
+    margin-bottom: 35px;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+.btn-primary {
+    display: inline-block;
+    padding: 15px 40px;
+    background-color: var(--color-gold);
+    color: var(--color-white);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    transition: background-color 0.3s, transform 0.3s var(--transition-smooth);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-gold-dark);
+    transform: translateY(-2px);
+}
+
+/* Diferenciais */
+.features-section {
+    background-color: var(--color-white);
+    padding: 60px 20px;
+    border-bottom: 1px solid rgba(197, 168, 128, 0.1);
+}
+
+.features-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 40px;
+    text-align: center;
+}
+
+.feature-card h3 {
+    font-family: var(--font-luxury);
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+
+.feature-card p {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+}
+
+/* Vitrine de Produtos */
+.shop-container {
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 100px 20px;
+}
+
+.section-title-wrapper {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.section-title {
+    font-family: var(--font-luxury);
+    font-size: 2.5rem;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.section-subtitle {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+}
+
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 40px;
+}
+
+/* Card do Produto */
+.product-card {
+    background-color: var(--color-white);
+    border: 1px solid rgba(197, 168, 128, 0.15);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    transition: transform 0.4s var(--transition-smooth), box-shadow 0.4s var(--transition-smooth);
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(38, 28, 20, 0.06);
+}
+
+.product-image-wrapper {
+    width: 100%;
+    height: 280px;
+    overflow: hidden;
+    position: relative;
+}
+
+.product-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s var(--transition-smooth);
+}
+
+.product-card:hover .product-image {
+    transform: scale(1.05);
+}
+
+.product-meta {
+    padding: 25px;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+}
+
+.product-title {
+    font-family: var(--font-luxury);
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.product-description {
+    font-size: 0.88rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+    margin-bottom: 20px;
+    flex-grow: 1;
+}
+
+/* Tag de Desconto Verde */
+.product-info-promo {
+    font-size: 0.78rem;
+    color: #2e7d32;
+    font-weight: 600;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.product-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.product-price {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--color-dark-chocolate);
+}
+
+.btn-add-cart {
+    background: none;
+    border: 1px solid var(--color-gold);
+    color: var(--color-dark-chocolate);
+    padding: 10px 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-add-cart:hover {
+    background-color: var(--color-gold);
+    color: var(--color-white);
+}
+
+/* Carrinho Drawer */
+.cart-drawer-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+
+.cart-drawer-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.cart-drawer {
+    position: fixed;
+    top: 0;
+    right: -450px;
+    width: 450px;
+    max-width: 100%;
+    height: 100vh;
+    background-color: var(--color-white);
+    z-index: 1000;
+    box-shadow: -10px 0 30px rgba(0,0,0,0.05);
+    transition: right 0.4s var(--transition-smooth);
+    display: flex;
+    flex-direction: column;
+}
+
+.cart-drawer.active {
+    right: 0;
+}
+
+.cart-drawer-header {
+    padding: 30px;
+    border-bottom: 1px solid rgba(197, 168, 128, 0.15);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart-drawer-header h3 {
+    font-family: var(--font-luxury);
+    font-size: 1.4rem;
+}
+
+.close-drawer-btn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--color-text-muted);
+}
+
+.cart-drawer-body {
+    padding: 30px;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+.cart-render-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(197, 168, 128, 0.1);
+}
+
+.cri-details h4 {
+    font-family: var(--font-luxury);
+    font-size: 1rem;
+    margin-bottom: 5px;
+}
+
+.cri-details p {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+}
+
+.cri-remove {
+    background: none;
+    border: none;
+    color: #c94c4c;
+    cursor: pointer;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.cart-drawer-footer {
+    padding: 30px;
+    background-color: var(--color-cream);
+    border-top: 1px solid rgba(197, 168, 128, 0.15);
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.shipping-disclaimer {
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    margin-bottom: 20px;
+}
+
+.btn-checkout {
+    width: 100%;
+    padding: 18px;
+    background-color: var(--color-dark-chocolate);
+    color: var(--color-white);
+    border: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-checkout:hover {
+    background-color: #3d2f24;
+}
+
+/* Modais de Checkout */
+.payment-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(38, 28, 20, 0.6);
+    backdrop-filter: blur(8px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s var(--transition-smooth);
+}
+
+.payment-modal-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.payment-modal {
+    background-color: var(--color-white);
+    border: 1px solid rgba(197, 168, 128, 0.2);
+    width: 500px;
+    max-width: 90%;
+    padding: 40px;
+    position: relative;
+    box-shadow: 0 30px 60px rgba(38, 28, 20, 0.15);
+    text-align: center;
+    transform: translateY(20px);
+    transition: transform 0.4s var(--transition-smooth);
+}
+
+.payment-modal-overlay.active .payment-modal {
+    transform: translateY(0);
+}
+
+.payment-modal h3 {
+    font-family: var(--font-luxury);
+    font-size: 1.6rem;
+    color: var(--color-dark-chocolate);
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+}
+
+.modal-subtitle {
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    margin-bottom: 30px;
+}
+
+.close-modal-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 1.3rem;
+    cursor: pointer;
+    color: var(--color-text-muted);
+}
+
+.payment-options-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.pay-option-card {
+    background-color: var(--color-cream);
+    border: 1px solid rgba(197, 168, 128, 0.2);
+    padding: 20px;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.3s var(--transition-smooth);
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.pay-option-card:hover {
+    border-color: var(--color-gold);
+    background-color: var(--color-white);
+    transform: translateX(4px);
+}
+
+.pay-option-card h4 {
+    font-family: var(--font-luxury);
+    font-size: 1.05rem;
+    color: var(--color-dark-chocolate);
+}
+
+.pay-option-card small {
+    font-size: 0.8rem;
+    color: var(--color-text-muted);
+}
+
+/* Caixa do QR Code */
+.qrcode-wrapper {
+    background-color: #ffffff;
+    border: 1px solid rgba(197, 168, 128, 0.15);
+    padding: 10px;
+    width: 240px;
+    height: 240px;
+    margin: 0 auto 20px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pix-instructions {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+    margin-bottom: 25px;
+}
+
+.main-footer {
+    background-color: var(--color-dark-chocolate);
+    color: rgba(255,255,255,0.6);
+    text-align: center;
+    padding: 40px 20px;
+    font-size: 0.85rem;
+}
+
+@media (max-width: 768px) {
+    .hero-title { font-size: 2.3rem; }
+    .cart-drawer { width: 100%; right: -100%; }
+    .main-nav { display: none; }
+}

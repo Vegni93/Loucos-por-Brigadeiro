@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ateliê Dolce & Brigadeiro | Alta Confeitaria</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-container">
+            <a href="#" class="brand-logo">Dolce & Brigadeiro</a>
+            <nav class="main-nav">
+                <a href="#vitrine">O Cardápio</a>
+                <a href="#Diferenciais">Nossos Pilares</a>
+            </nav>
+            <button class="cart-trigger" id="cartTrigger" aria-label="Abrir Carrinho">
+                <span class="cart-icon-wrapper">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                </span>
+                <span class="cart-badge" id="cartBadge">0</span>
+            </button>
+        </div>
+    </header>
+
+    <section class="hero-section">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <span class="hero-subtitle">Experiência Gastronômica Exclusiva</span>
+            <h1 class="hero-title">O Verdadeiro Brigadeiro Gourmet</h1>
+            <p class="hero-lead">Feito à mão, combinando o mais puro chocolate nobre belga com texturas que derretem na boca.</p>
+            <a href="#vitrine" class="btn-primary">Descubra os Sabores</a>
+        </div>
+    </section>
+
+    <section class="features-section" id="Diferenciais">
+        <div class="features-container">
+            <div class="feature-card">
+                <h3>Ingredientes Nobres</h3>
+                <p>Cacau de origem rastreada e manteiga fresca francesa.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Produção Diária</h3>
+                <p>Boleados poucas horas antes de chegarem até você.</p>
+            </div>
+            <div class="feature-card">
+                <h3>Design para Presente</h3>
+                <p>Embalagens cartonadas minimalistas com acabamento em fita.</p>
+            </div>
+        </div>
+    </section>
+
+    <main class="shop-container" id="vitrine">
+        <div class="section-title-wrapper">
+            <h2 class="section-title">Nossa Coleção</h2>
+            <p class="section-subtitle">Escolha os seus favoritos para montar sua caixa exclusiva (20% OFF a cada 5 unidades)</p>
+        </div>
+        <div class="products-grid" id="productsGrid"></div>
+    </main>
+
+    <div class="cart-drawer-overlay" id="cartOverlay"></div>
+    <aside class="cart-drawer" id="cartDrawer" aria-hidden="true">
+        <div class="cart-drawer-header">
+            <h3>Sua Seleção</h3>
+            <button class="close-drawer-btn" id="closeCartBtn">✕</button>
+        </div>
+        <div class="cart-drawer-body" id="cartDrawerItems"></div>
+        <div class="cart-drawer-footer">
+            <div class="total-row">
+                <span>Subtotal:</span>
+                <span class="total-price-value" id="cartTotal">R$ 0,00</span>
+            </div>
+            <p class="shipping-disclaimer">Escolha a forma de pagamento na próxima etapa.</p>
+            <button class="btn-checkout" id="checkoutBtn">Avançar para o Pagamento</button>
+        </div>
+    </aside>
+
+    <div class="payment-modal-overlay" id="paymentModalOverlay">
+        <div class="payment-modal">
+            <button class="close-modal-btn" id="closeModalBtn">✕</button>
+            
+            <div id="paymentSelectionScreen">
+                <h3>Como deseja pagar?</h3>
+                <p class="modal-subtitle">Escolha a melhor opção para finalizar sua encomenda</p>
+                <div class="payment-options-grid">
+                    <button class="pay-option-card" onclick="PaymentFlow.selectMethod('pix')">
+                        <span class="icon">📱</span>
+                        <h4>Pagar agora via PIX</h4>
+                        <small>Abra o banco, escaneie o código com o valor já embutido</small>
+                    </button>
+                    <button class="pay-option-card" onclick="PaymentFlow.selectMethod('confeiteira')">
+                        <span class="icon">👩‍🍳</span>
+                        <h4>Acertar com a Confeiteira</h4>
+                        <small>Combine dinheiro, cartão ou PIX na entrega/retirada</small>
+                    </button>
+                </div>
+            </div>
+
+            <div id="paymentPixScreen" style="display: none;">
+                <h3>Pagamento via PIX</h3>
+                <p class="modal-subtitle">Escaneie o código abaixo no aplicativo do seu banco:</p>
+                
+                <div style="background: #fbf9f6; padding: 15px; border: 1px dashed #c5a880; margin-bottom: 20px; border-radius: 4px;">
+                    <span style="font-size: 11px; color: #6e655f; display: block; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Valor a transferir:</span>
+                    <strong id="pixModalTotal" style="font-size: 26px; color: #261c14; font-family: var(--font-luxury);">R$ 0,00</strong>
+                </div>
+
+                <div class="qrcode-wrapper" style="background: #ffffff; padding: 10px; width: 220px; height: 220px; margin: 0 auto 20px auto; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(197,168,128,0.2);">
+                    <div id="qrcodeContainer"></div>
+                </div>
+
+                <button id="btnCopyPix" class="btn-checkout" style="background-color: #6e655f; margin-bottom: 15px; padding: 10px; font-size: 12px; letter-spacing: 1px;">
+                    📋 Copiar Código PIX Copia e Cola
+                </button>
+                
+                <p class="pix-instructions">O valor já está fixado no código acima. Após pagar, clique abaixo para enviar o comprovante.</p>
+                <button class="btn-checkout" onclick="PaymentFlow.finishWithPix()">Já paguei, enviar comprovante 💬</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="main-footer">
+        <p>&copy; 2026 Ateliê Dolce & Brigadeiro. Todos os direitos reservados.</p>
+        <p>Alta Confeitaria Artesanal.</p>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
