@@ -1,135 +1,727 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ateliê Dolce & Brigadeiro | Alta Confeitaria</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-    
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loucos por Brigadeiro 🍫</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --choco:#3B1A08;--choco-mid:#7A3B1E;--caramel:#C87941;
+  --cream:#FDF6ED;--cream-dark:#F5E8D2;--white:#FFFDF9;
+  --text:#2A1005;--text-muted:#7A5A3A;
+  --green:#2D7A3A;--green-light:#E8F5EA;
+  --radius:20px;--radius-lg:32px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--text);overflow-x:hidden}
+
+/* NAV */
+nav{position:fixed;top:0;left:0;width:100%;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:1.2rem 4rem;background:rgba(253,246,237,0.92);backdrop-filter:blur(14px);border-bottom:1px solid rgba(200,121,65,0.15)}
+.nav-logo{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;color:var(--choco);text-decoration:none}
+.nav-logo span{color:var(--caramel)}
+.nav-links{display:flex;gap:2.5rem;list-style:none}
+.nav-links a{text-decoration:none;color:var(--text-muted);font-size:.95rem;font-weight:500;transition:color .2s}
+.nav-links a:hover{color:var(--choco)}
+.nav-right{display:flex;align-items:center;gap:1rem}
+.nav-cta{background:var(--choco);color:var(--cream)!important;padding:.6rem 1.4rem;border-radius:100px;transition:background .2s,transform .15s!important}
+.nav-cta:hover{background:var(--choco-mid)!important;transform:translateY(-1px)}
+.cart-btn{position:relative;background:var(--cream-dark);border:1.5px solid rgba(200,121,65,.25);border-radius:100px;padding:.55rem 1.1rem;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:500;color:var(--choco);display:flex;align-items:center;gap:.5rem;transition:background .2s}
+.cart-btn:hover{background:var(--cream)}
+.cart-count{background:var(--caramel);color:#fff;border-radius:50%;width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700}
+
+/* HERO */
+#hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:8rem 4rem 5rem;gap:4rem;position:relative;overflow:hidden}
+.hero-bg-blob{position:absolute;border-radius:50%;filter:blur(80px);opacity:.35;pointer-events:none}
+.blob1{width:600px;height:600px;background:#F9C5B0;top:-100px;right:-100px}
+.blob2{width:400px;height:400px;background:var(--caramel);opacity:.15;bottom:0;left:-80px}
+.hero-text{position:relative;z-index:2}
+.hero-badge{display:inline-flex;align-items:center;gap:.5rem;background:var(--cream-dark);border:1px solid rgba(200,121,65,.3);border-radius:100px;padding:.4rem 1rem;font-size:.82rem;font-weight:500;color:var(--choco-mid);margin-bottom:1.5rem;animation:fadeUp .8s ease both}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(3rem,5vw,4.5rem);font-weight:900;line-height:1.05;color:var(--choco);letter-spacing:-.03em;margin-bottom:1.5rem;animation:fadeUp .8s .1s ease both}
+.hero-title em{font-style:italic;color:var(--caramel)}
+.hero-desc{font-size:1.1rem;color:var(--text-muted);line-height:1.7;max-width:480px;margin-bottom:1.5rem;font-weight:300;animation:fadeUp .8s .2s ease both}
+.discount-badge{display:inline-flex;align-items:center;gap:.5rem;background:var(--green-light);border:1.5px solid #b2dfbb;border-radius:100px;padding:.45rem 1.1rem;font-size:.85rem;font-weight:500;color:var(--green);margin-bottom:2rem;animation:fadeUp .8s .25s ease both}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;animation:fadeUp .8s .3s ease both}
+.btn-primary{background:var(--choco);color:var(--cream);padding:.85rem 2rem;border-radius:100px;text-decoration:none;font-weight:500;font-size:.95rem;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 20px rgba(59,26,8,.3)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(59,26,8,.35)}
+.btn-secondary{background:transparent;color:var(--choco);padding:.85rem 2rem;border-radius:100px;text-decoration:none;font-weight:500;font-size:.95rem;border:1.5px solid var(--choco);transition:background .2s;cursor:pointer;font-family:'DM Sans',sans-serif}
+.btn-secondary:hover{background:var(--cream-dark)}
+.hero-visual{position:relative;z-index:2;display:flex;align-items:center;justify-content:center;animation:fadeUp .8s .15s ease both}
+.hero-plate{width:420px;height:420px;background:radial-gradient(ellipse at 40% 35%,#fff5eb,var(--cream-dark));border-radius:50%;display:flex;align-items:center;justify-content:center;position:relative;box-shadow:0 30px 80px rgba(59,26,8,.15),inset 0 -10px 30px rgba(200,121,65,.08);border:2px solid rgba(200,121,65,.15)}
+.plate-emoji{font-size:9rem;filter:drop-shadow(0 8px 24px rgba(59,26,8,.2))}
+.floating-tag{position:absolute;background:var(--white);border:1px solid rgba(200,121,65,.2);border-radius:16px;padding:.6rem 1rem;font-size:.82rem;font-weight:500;color:var(--choco);box-shadow:0 8px 30px rgba(59,26,8,.1);white-space:nowrap;animation:float 3s ease-in-out infinite}
+.tag1{top:30px;left:-20px;animation-delay:0s}
+.tag2{bottom:60px;left:-30px;animation-delay:1s}
+.tag3{top:50px;right:-30px;animation-delay:.5s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+/* SECTION */
+section{padding:6rem 4rem}
+.section-label{display:inline-block;font-size:.78rem;font-weight:500;letter-spacing:.15em;text-transform:uppercase;color:var(--caramel);margin-bottom:.75rem}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,3.5vw,3rem);font-weight:900;color:var(--choco);line-height:1.1;letter-spacing:-.02em;margin-bottom:1rem}
+.section-title em{font-style:italic;color:var(--caramel)}
+.section-desc{color:var(--text-muted);font-size:1.05rem;line-height:1.7;font-weight:300;max-width:520px}
+
+/* STATS */
+#stats{background:var(--choco);padding:3rem 4rem;display:flex;justify-content:space-around;align-items:center;gap:2rem;flex-wrap:wrap}
+.stat-item{text-align:center}
+.stat-number{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:900;color:var(--cream);line-height:1;display:block}
+.stat-label{font-size:.85rem;color:rgba(253,246,237,.55);margin-top:.3rem;font-weight:300;letter-spacing:.05em;display:block}
+.stat-divider{width:1px;height:60px;background:rgba(253,246,237,.15)}
+
+/* CARDÁPIO */
+#cardapio{background:var(--white)}
+.cardapio-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:3.5rem;flex-wrap:wrap;gap:1.5rem}
+.filter-tabs{display:flex;gap:.5rem;flex-wrap:wrap}
+.tab{padding:.5rem 1.25rem;border-radius:100px;border:1.5px solid rgba(59,26,8,.15);font-size:.88rem;font-weight:500;cursor:pointer;transition:all .2s;background:transparent;color:var(--text-muted);font-family:'DM Sans',sans-serif}
+.tab.active,.tab:hover{background:var(--choco);color:var(--cream);border-color:var(--choco)}
+.cardapio-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem}
+.card{background:var(--cream);border-radius:var(--radius-lg);overflow:hidden;border:1px solid rgba(200,121,65,.12);transition:transform .25s,box-shadow .25s}
+.card:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(59,26,8,.12)}
+.card-img{width:100%;height:180px;display:flex;align-items:center;justify-content:center;font-size:5rem;position:relative;overflow:hidden}
+.card-img-bg{position:absolute;inset:0}
+.card-emoji{position:relative;z-index:1;filter:drop-shadow(0 4px 12px rgba(0,0,0,.15))}
+.card-body{padding:1.25rem 1.5rem 1.5rem}
+.card-tag{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;font-weight:500;color:var(--caramel);margin-bottom:.4rem}
+.card-name{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;color:var(--choco);margin-bottom:.4rem;line-height:1.2}
+.card-desc{font-size:.85rem;color:var(--text-muted);line-height:1.5;margin-bottom:.75rem;font-weight:300}
+.card-promo{background:var(--green-light);border:1px solid #b2dfbb;border-radius:10px;padding:.4rem .75rem;font-size:.78rem;color:var(--green);font-weight:500;margin-bottom:1rem;display:inline-flex;align-items:center;gap:.35rem}
+.card-footer{display:flex;align-items:center;justify-content:space-between}
+.card-price{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--choco)}
+.card-price span{font-size:.82rem;font-family:'DM Sans',sans-serif;font-weight:400;color:var(--text-muted)}
+.qty-control{display:flex;align-items:center;gap:.5rem}
+.qty-btn{width:32px;height:32px;border-radius:50%;border:1.5px solid rgba(59,26,8,.2);background:transparent;color:var(--choco);font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;font-family:'DM Sans',sans-serif}
+.qty-btn:hover{background:var(--choco);color:var(--cream);border-color:var(--choco)}
+.qty-num{min-width:28px;text-align:center;font-weight:500;font-size:.95rem;color:var(--choco)}
+
+/* SOBRE */
+#sobre{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center}
+.sobre-main-card{background:var(--cream-dark);border-radius:var(--radius-lg);padding:3rem;text-align:center;border:1px solid rgba(200,121,65,.15)}
+.sobre-emoji{font-size:7rem;display:block;margin-bottom:1rem}
+.sobre-card-text{font-family:'Playfair Display',serif;font-style:italic;font-size:1.15rem;color:var(--choco-mid);line-height:1.6}
+.sobre-accent-card{background:var(--choco);color:var(--cream);border-radius:var(--radius);padding:1.2rem 1.5rem;font-size:.9rem;max-width:200px;line-height:1.4;font-weight:300;margin-top:1.5rem;display:inline-block}
+.sobre-accent-card strong{display:block;font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;margin-bottom:.2rem}
+.values-list{list-style:none;margin-top:2rem;display:flex;flex-direction:column;gap:1rem}
+.values-list li{display:flex;align-items:flex-start;gap:1rem;padding:1rem 1.2rem;border-radius:var(--radius);background:var(--cream-dark);border:1px solid rgba(200,121,65,.1)}
+.value-icon{width:40px;height:40px;background:var(--choco);border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.value-text strong{display:block;font-size:.95rem;font-weight:500;color:var(--choco);margin-bottom:.15rem}
+.value-text p{font-size:.85rem;color:var(--text-muted);font-weight:300}
+
+/* DEPOIMENTOS */
+#depoimentos{background:var(--choco)}
+#depoimentos .section-title{color:var(--cream)}
+#depoimentos .section-label{color:var(--caramel)}
+#depoimentos .section-desc{color:rgba(253,246,237,.6)}
+.depo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;margin-top:3rem}
+.depo-card{background:rgba(255,255,255,.07);border:1px solid rgba(253,246,237,.12);border-radius:var(--radius-lg);padding:1.75rem;transition:background .2s}
+.depo-card:hover{background:rgba(255,255,255,.1)}
+.depo-stars{color:var(--caramel);font-size:1rem;margin-bottom:1rem;letter-spacing:.1em}
+.depo-text{font-size:1rem;color:rgba(253,246,237,.85);line-height:1.65;font-weight:300;font-style:italic;margin-bottom:1.25rem}
+.depo-author{display:flex;align-items:center;gap:.75rem}
+.depo-avatar{width:40px;height:40px;border-radius:50%;background:var(--caramel);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.depo-name{font-size:.9rem;font-weight:500;color:var(--cream)}
+.depo-city{font-size:.78rem;color:rgba(253,246,237,.45)}
+
+/* PEDIDO */
+#pedido{background:var(--cream-dark)}
+.pedido-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;margin-top:3rem}
+.form-group{margin-bottom:1.25rem}
+.form-group label{display:block;font-size:.85rem;font-weight:500;color:var(--choco);margin-bottom:.4rem;letter-spacing:.02em}
+.form-group input,.form-group textarea,.form-group select{width:100%;padding:.9rem 1.1rem;border-radius:var(--radius);border:1.5px solid rgba(59,26,8,.15);background:var(--white);font-family:'DM Sans',sans-serif;font-size:.95rem;color:var(--text);outline:none;transition:border-color .2s;appearance:none}
+.form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--caramel)}
+.form-group textarea{min-height:110px;resize:vertical;line-height:1.5}
+.submit-btn{width:100%;padding:1rem;background:var(--choco);color:var(--cream);border:none;border-radius:100px;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:500;cursor:pointer;transition:transform .2s,box-shadow .2s;box-shadow:0 4px 20px rgba(59,26,8,.25)}
+.submit-btn:hover{transform:translateY(-2px);box-shadow:0 8px 30px rgba(59,26,8,.35)}
+.contact-info{display:flex;flex-direction:column;gap:1.5rem}
+.contact-item{display:flex;gap:1rem;align-items:flex-start;padding:1.25rem;border-radius:var(--radius);background:var(--white);border:1px solid rgba(200,121,65,.1)}
+.contact-icon{width:44px;height:44px;border-radius:14px;background:var(--cream-dark);border:1px solid rgba(200,121,65,.2);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
+.contact-label{font-size:.78rem;color:var(--text-muted);font-weight:500;letter-spacing:.05em;text-transform:uppercase}
+.contact-value{font-size:.98rem;color:var(--choco);font-weight:500;margin-top:.15rem}
+
+/* FOOTER */
+footer{background:#1A0A02;color:rgba(253,246,237,.5);padding:3rem 4rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1.5rem}
+.footer-brand{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--cream)}
+.footer-brand span{color:var(--caramel)}
+.footer-links{display:flex;gap:2rem}
+.footer-links a{text-decoration:none;color:rgba(253,246,237,.45);font-size:.88rem;transition:color .2s}
+.footer-links a:hover{color:var(--cream)}
+.footer-copy{font-size:.82rem}
+
+/* WHATSAPP FAB */
+.whatsapp-fab{position:fixed;bottom:2rem;right:2rem;width:58px;height:58px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;text-decoration:none;box-shadow:0 8px 30px rgba(37,211,102,.4);transition:transform .2s,box-shadow .2s;z-index:200}
+.whatsapp-fab:hover{transform:scale(1.1);box-shadow:0 12px 40px rgba(37,211,102,.5)}
+
+/* ── CARRINHO SIDEBAR ── */
+.cart-overlay{position:fixed;inset:0;background:rgba(42,16,5,.45);z-index:300;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(4px)}
+.cart-overlay.open{opacity:1;pointer-events:all}
+.cart-sidebar{position:fixed;top:0;right:0;height:100%;width:420px;max-width:100vw;background:var(--white);z-index:301;transform:translateX(110%);transition:transform .35s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:-20px 0 60px rgba(59,26,8,.15)}
+.cart-sidebar.open{transform:translateX(0)}
+.cart-header{display:flex;align-items:center;justify-content:space-between;padding:1.5rem 1.75rem;border-bottom:1px solid rgba(200,121,65,.15)}
+.cart-header h3{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;color:var(--choco)}
+.cart-close{background:none;border:none;font-size:1.5rem;cursor:pointer;color:var(--text-muted);line-height:1;padding:.25rem}
+.cart-close:hover{color:var(--choco)}
+.cart-items{flex:1;overflow-y:auto;padding:1.25rem 1.75rem;display:flex;flex-direction:column;gap:1rem}
+.cart-empty{text-align:center;padding:3rem 1rem;color:var(--text-muted)}
+.cart-empty span{font-size:3.5rem;display:block;margin-bottom:1rem}
+.cart-item{display:flex;align-items:center;gap:1rem;padding:1rem;background:var(--cream);border-radius:var(--radius);border:1px solid rgba(200,121,65,.08)}
+.item-emoji{font-size:2.2rem}
+.item-info{flex:1}
+.item-name{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:var(--choco);margin-bottom:.15rem}
+.item-price{font-size:.85rem;color:var(--caramel);font-weight:500}
+.item-actions{display:flex;align-items:center;gap:.75rem}
+.cart-footer-box{padding:1.5rem 1.75rem;background:var(--cream);border-top:1px solid rgba(200,121,65,.15)}
+.summary-row{display:flex;justify-content:space-between;margin-bottom:.5rem;font-size:.9rem;color:var(--text-muted)}
+.summary-row.discount{color:var(--green);font-weight:500}
+.summary-row.total{margin-top:.75rem;padding-top:.75rem;border-top:1px solid rgba(59,26,8,.1);font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900;color:var(--choco)}
+.checkout-btn{width:100%;padding:1rem;background:var(--choco);color:var(--cream);border:none;border-radius:100px;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:500;cursor:pointer;margin-top:1rem;transition:background .2s}
+.checkout-btn:hover{background:var(--choco-mid)}
+.checkout-btn:disabled{background:rgba(59,26,8,.2);color:rgba(59,26,8,.4);cursor:not-allowed}
+
+/* ── MODAL PIX ── */
+.pix-modal-overlay{position:fixed;inset:0;background:rgba(42,16,5,.6);z-index:400;display:none;align-items:center;justify-content:center;backdrop-filter:blur(6px);padding:1rem}
+.pix-modal-overlay.open{display:flex}
+.pix-modal{background:var(--white);border-radius:var(--radius-lg);width:100%;max-width:440px;padding:2rem;box-shadow:0 30px 90px rgba(42,16,5,.25);border:1px solid rgba(200,121,65,.2);text-align:center;position:relative}
+.pix-modal-close{position:absolute;top:1.25rem;right:1.25rem;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--text-muted)}
+.pix-modal-close:hover{color:var(--choco)}
+.pix-modal h4{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:var(--choco);margin-bottom:.5rem}
+.pix-modal p{font-size:.9rem;color:var(--text-muted);line-height:1.5;margin-bottom:1.5rem}
+.pix-amount-box{background:var(--cream);border-radius:var(--radius);padding:1rem;margin-bottom:1.5rem;border:1px solid rgba(200,121,65,.12)}
+.pix-amount-label{font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);display:block;margin-bottom:.2rem}
+.pix-amount-val{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:900;color:var(--choco)}
+.qrcode-wrapper{background:#fff;padding:12px;border-radius:var(--radius);box-shadow:0 10px 30px rgba(59,26,8,.06);border:1px solid rgba(200,121,65,.15);width:224px;height:224px;margin:0 auto 1.5rem;display:flex;align-items:center;justify-content:center}
+.copy-btn{width:100%;padding:.85rem;background:var(--cream-dark);color:var(--choco);border:1px solid rgba(200,121,65,.25);border-radius:100px;font-family:'DM Sans',sans-serif;font-size:.9rem;font-weight:500;cursor:pointer;margin-bottom:1rem;display:flex;align-items:center;justify-content:center;gap:.5rem;transition:background .2s}
+.copy-btn:hover{background:var(--cream)}
+.pix-btn-wa{width:100%;padding:1rem;background:#25D366;color:#fff;border:none;border-radius:100px;font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:.5rem;box-shadow:0 4px 15px rgba(37,211,102,.2);transition:transform .2s}
+.pix-btn-wa:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(37,211,102,.3)}
+
+/* RESPONSIVO */
+@media(max-width:968px){
+  nav{padding:1.2rem 2rem}
+  .nav-links{display:none}
+  #hero{grid-template-columns:1fr;padding:7rem 2rem 4rem;text-align:center;gap:3rem}
+  .hero-desc{margin-left:auto;margin-right:auto}
+  .hero-btns{justify-content:center}
+  .hero-plate{width:320px;height:320px}
+  .plate-emoji{font-size:7.5rem}
+  section{padding:5rem 2rem}
+  #sobre{grid-template-columns:1fr;gap:3rem}
+  .pedido-grid{grid-template-columns:1fr;gap:3rem}
+  footer{padding:2.5rem 2rem;flex-direction:column;text-align:center;gap:1rem}
+  .footer-links{justify-content:center}
+}
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 </head>
 <body>
 
-    <header class="main-header">
-        <div class="header-container">
-            <a href="#" class="brand-logo">Dolce & Brigadeiro</a>
-            <nav class="main-nav">
-                <a href="#vitrine">O Cardápio</a>
-                <a href="#Diferenciais">Nossos Pilares</a>
-            </nav>
-            <button class="cart-trigger" id="cartTrigger" aria-label="Abrir Carrinho">
-                <span class="cart-icon-wrapper">
-                    <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
-                </span>
-                <span class="cart-badge" id="cartBadge">0</span>
-            </button>
-        </div>
-    </header>
+<nav>
+  <a href="#" class="nav-logo">Loucos por<span>Brigadeiro</span></a>
+  <ul class="nav-links">
+    <li><a href="#hero">Início</a></li>
+    <li><a href="#cardapio">Cardápio</a></li>
+    <li><a href="#sobre">Nossa História</a></li>
+    <li><a href="#depoimentos">Depoimentos</a></li>
+    <li><a href="#pedido">Fazer Pedido</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="cart-btn" onclick="toggleCart(true)">
+      🛒 Carrinho
+      <span class="cart-count" id="cartBadge">0</span>
+    </button>
+    <a href="#cardapio" class="nav-links nav-cta">Pedir Agora</a>
+  </div>
+</nav>
 
-    <section class="hero-section">
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <span class="hero-subtitle">Experiência Gastronômica Exclusiva</span>
-            <h1 class="hero-title">O Verdadeiro Brigadeiro Gourmet</h1>
-            <p class="hero-lead">Feito à mão, combinando o mais puro chocolate nobre belga com texturas que derretem na boca.</p>
-            <a href="#vitrine" class="btn-primary">Descubra os Sabores</a>
-        </div>
-    </section>
-
-    <section class="features-section" id="Diferenciais">
-        <div class="features-container">
-            <div class="feature-card">
-                <h3>Ingredientes Nobres</h3>
-                <p>Cacau de origem rastreada e manteiga fresca francesa.</p>
-            </div>
-            <div class="feature-card">
-                <h3>Produção Diária</h3>
-                <p>Boleados poucas horas antes de chegarem até você.</p>
-            </div>
-            <div class="feature-card">
-                <h3>Design para Presente</h3>
-                <p>Embalagens cartonadas minimalistas com acabamento em fita.</p>
-            </div>
-        </div>
-    </section>
-
-    <main class="shop-container" id="vitrine">
-        <div class="section-title-wrapper">
-            <h2 class="section-title">Nossa Coleção</h2>
-            <p class="section-subtitle">Escolha os seus favoritos para montar sua caixa exclusiva (20% OFF a cada 5 unidades)</p>
-        </div>
-        <div class="products-grid" id="productsGrid"></div>
-    </main>
-
-    <div class="cart-drawer-overlay" id="cartOverlay"></div>
-    <aside class="cart-drawer" id="cartDrawer" aria-hidden="true">
-        <div class="cart-drawer-header">
-            <h3>Sua Seleção</h3>
-            <button class="close-drawer-btn" id="closeCartBtn">✕</button>
-        </div>
-        <div class="cart-drawer-body" id="cartDrawerItems"></div>
-        <div class="cart-drawer-footer">
-            <div class="total-row">
-                <span>Subtotal:</span>
-                <span class="total-price-value" id="cartTotal">R$ 0,00</span>
-            </div>
-            <p class="shipping-disclaimer">Escolha a forma de pagamento na próxima etapa.</p>
-            <button class="btn-checkout" id="checkoutBtn">Avançar para o Pagamento</button>
-        </div>
-    </aside>
-
-    <div class="payment-modal-overlay" id="paymentModalOverlay">
-        <div class="payment-modal">
-            <button class="close-modal-btn" id="closeModalBtn">✕</button>
-            
-            <div id="paymentSelectionScreen">
-                <h3>Como deseja pagar?</h3>
-                <p class="modal-subtitle">Escolha a melhor opção para finalizar sua encomenda</p>
-                <div class="payment-options-grid">
-                    <button class="pay-option-card" onclick="PaymentFlow.selectMethod('pix')">
-                        <span class="icon">📱</span>
-                        <h4>Pagar agora via PIX</h4>
-                        <small>Abra o banco, escaneie o código com o valor já embutido</small>
-                    </button>
-                    <button class="pay-option-card" onclick="PaymentFlow.selectMethod('confeiteira')">
-                        <span class="icon">👩‍🍳</span>
-                        <h4>Acertar com a Confeiteira</h4>
-                        <small>Combine dinheiro, cartão ou PIX na entrega/retirada</small>
-                    </button>
-                </div>
-            </div>
-
-            <div id="paymentPixScreen" style="display: none;">
-                <h3>Pagamento via PIX</h3>
-                <p class="modal-subtitle">Escaneie o código abaixo no aplicativo do seu banco:</p>
-                
-                <div style="background: #fbf9f6; padding: 15px; border: 1px dashed #c5a880; margin-bottom: 20px; border-radius: 4px;">
-                    <span style="font-size: 11px; color: #6e655f; display: block; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;">Valor a transferir:</span>
-                    <strong id="pixModalTotal" style="font-size: 26px; color: #261c14; font-family: var(--font-luxury);">R$ 0,00</strong>
-                </div>
-
-                <div class="qrcode-wrapper" style="background: #ffffff; padding: 10px; width: 220px; height: 220px; margin: 0 auto 20px auto; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(197,168,128,0.2);">
-                    <div id="qrcodeContainer"></div>
-                </div>
-
-                <button id="btnCopyPix" class="btn-checkout" style="background-color: #6e655f; margin-bottom: 15px; padding: 10px; font-size: 12px; letter-spacing: 1px;">
-                    📋 Copiar Código PIX Copia e Cola
-                </button>
-                
-                <p class="pix-instructions">O valor já está fixado no código acima. Após pagar, clique abaixo para enviar o comprovante.</p>
-                <button class="btn-checkout" onclick="PaymentFlow.finishWithPix()">Já paguei, enviar comprovante 💬</button>
-            </div>
-        </div>
+<section id="hero">
+  <div class="hero-bg-blob blob1"></div>
+  <div class="hero-bg-blob blob2"></div>
+  
+  <div class="hero-text">
+    <span class="hero-badge">✨ Alta Confeitaria Artesanal</span>
+    <h1 class="hero-title">O verdadeiro brigadeiro <em>gourmet</em> na sua mesa</h1>
+    <p class="hero-desc">Feitos à mão com o mais puro chocolate belga e ingredientes selecionados. Uma explosão de cremosidade incomparável.</p>
+    <div class="discount-badge">🎉 Super Promoção: Peça em lotes de 5 unidades e ganhe 20% de Desconto!</div>
+    <div class="hero-btns">
+      <a href="#cardapio" class="btn-primary">Ver Sabores</a>
+      <a href="#sobre" class="btn-secondary">Conhecer Ateliê</a>
     </div>
+  </div>
+  
+  <div class="hero-visual">
+    <div class="hero-plate">
+      <span class="plate-emoji">🍫</span>
+      <span class="floating-tag tag1">👩‍🍳 100% Artesanal</span>
+      <span class="floating-tag tag2">👑 Premium Belgian</span>
+      <span class="floating-tag tag3">❤️ Feito com Amor</span>
+    </div>
+  </div>
+</section>
 
-    <footer class="main-footer">
-        <p>&copy; 2026 Ateliê Dolce & Brigadeiro. Todos os direitos reservados.</p>
-        <p>Alta Confeitaria Artesanal.</p>
-    </footer>
+<div id="stats">
+  <div class="stat-item">
+    <span class="stat-number">15+</span>
+    <span class="stat-label">SABORES EXCLUSIVOS</span>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item">
+    <span class="stat-number">10k+</span>
+    <span class="stat-label">BRIGADEIROS ENTREGUES</span>
+  </div>
+  <div class="stat-divider"></div>
+  <div class="stat-item">
+    <span class="stat-number">4.9/5</span>
+    <span class="stat-label">AVALIAÇÃO CLIENTES</span>
+  </div>
+</div>
 
-    <script src="js/app.js"></script>
+<section id="cardapio">
+  <div class="cardapio-header">
+    <div>
+      <span class="section-label">Menu Exclusivo</span>
+      <h2 class="section-title">Explore nossas <em>delícias</em></h2>
+      <p class="section-desc">Escolha entre os clássicos tradicionais ou as nossas criações gourmets assinadas pela chef.</p>
+    </div>
+    <div class="filter-tabs">
+      <button class="tab active" onclick="filterCards(this, 'all')">Todos</button>
+      <button class="tab" onclick="filterCards(this, 'tradicional')">Tradicionais</button>
+      <button class="tab" onclick="filterCards(this, 'gourmet')">Gourmets</button>
+    </div>
+  </div>
+
+  <div class="cardapio-grid" id="productsGrid"></div>
+</section>
+
+<section id="sobre">
+  <div class="sobre-main-card">
+    <span class="sobre-emoji">✨</span>
+    <p class="sobre-card-text">"Nossa missão vai além de fazer doces. Nós moldamos memórias afetivas em forma de pequenas esferas de felicidade absoluta."</p>
+    <div class="sobre-accent-card">
+      <strong>Desde 2018</strong>
+      Adoçando os momentos mais especiais.
+    </div>
+  </div>
+  <div>
+    <span class="section-label">Nossa Essência</span>
+    <h2 class="section-title">Tradição familiar com toque de <em>luxo</em></h2>
+    <p class="section-desc" style="margin-bottom: 1.5rem;">O Loucos por Brigadeiro nasceu do desejo de transformar o doce mais amado do Brasil em uma experiência gastronômica requintada e inesquecível.</p>
+    <ul class="values-list">
+      <li>
+        <div class="value-icon">🍫</div>
+        <div class="value-text">
+          <strong>Matéria-Prima Belga</strong>
+          <p>Usamos apenas cacau e callets rastreáveis e sustentáveis de alta qualidade.</p>
+        </div>
+      </li>
+      <li>
+        <div class="value-icon">⏱️</div>
+        <div class="value-text">
+          <strong>Sempre Fresquinhos</strong>
+          <p>Nossos doces são enrolados poucas horas antes da entrega para manter o frescor supremo.</p>
+        </div>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<section id="depoimentos">
+  <div style="text-align: center; margin-bottom: 2rem;">
+    <span class="section-label">Feedbacks</span>
+    <h2 class="section-title">Quem prova, se <em>apaixona</em></h2>
+    <p class="section-desc" style="margin-content: auto; margin-right: auto; margin-left: auto;">Depoimentos reais de clientes que transformaram seus eventos com nossos brigadeiros.</p>
+  </div>
+  <div class="depo-grid">
+    <div class="depo-card">
+      <div class="depo-stars">★★★★★</div>
+      <p class="depo-text">"O negrinho tradicional derrete na boca! Nunca comi nada igual. Dá para sentir a qualidade do chocolate de longe."</p>
+      <div class="depo-author">
+        <div class="depo-avatar">👩</div>
+        <div>
+          <div class="depo-name">Mariana Silva</div>
+          <div class="depo-city">Porto Alegre / RS</div>
+        </div>
+      </div>
+    </div>
+    <div class="depo-card">
+      <div class="depo-stars">★★★★★</div>
+      <p class="depo-text">"O de Ninho com Nutella fez um sucesso absurdo no aniversário da minha filha. Os convidados ficaram encantados!"</p>
+      <div class="depo-author">
+        <div class="depo-avatar">👨</div>
+        <div>
+          <div class="depo-name">Carlos Eduardo</div>
+          <div class="depo-city">Canoas / RS</div>
+        </div>
+      </div>
+    </div>
+    <div class="depo-card">
+      <div class="depo-stars">★★★★★</div>
+      <p class="depo-text">"O atendimento é impecável e a caixinha do presente é luxuosa. É o presente perfeito para quem a gente ama."</p>
+      <div class="depo-author">
+        <div class="depo-avatar">👩</div>
+        <div>
+          <div class="depo-name">Beatriz Costa</div>
+          <div class="depo-city">Guaíba / RS</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="pedido">
+  <div class="pedido-grid">
+    <div>
+      <span class="section-label">Contato Direto</span>
+      <h2 class="section-title">Tem alguma dúvida? Fale <em>conosco</em></h2>
+      <p class="section-desc" style="margin-bottom: 2rem;">Estamos prontos para atender encomendas personalizadas, grandes eventos corporativos ou casamentos.</p>
+      <div class="contact-info">
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div>
+            <span class="contact-label">Nosso Ateliê</span>
+            <div class="contact-value">Bairro Moinhos de Vento - Porto Alegre/RS</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">💬</div>
+          <div>
+            <span class="contact-label">WhatsApp Oficial</span>
+            <div class="contact-value">(51) 98944-5101</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <form onsubmit="handleSubmit(event)" style="background: var(--white); padding: 2.5rem; border-radius: var(--radius-lg); border: 1px solid rgba(200,121,65,.15);">
+        <div class="form-group">
+          <label>Seu Nome Completo</label>
+          <input type="text" placeholder="Ex: Ana Maria" required>
+        </div>
+        <div class="form-group">
+          <label>Telefone / WhatsApp</label>
+          <input type="tel" placeholder="Ex: (51) 99999-9999" required>
+        </div>
+        <div class="form-group">
+          <label>Como podemos te ajudar?</label>
+          <textarea placeholder="Conte-nos sobre seu evento ou pedido personalizado..." required></textarea>
+        </div>
+        <button type="submit" class="submit-btn">Enviar Mensagem via WhatsApp 💬</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <a href="#" class="footer-brand">Loucos por<span>Brigadeiro</span></a>
+  <div class="footer-links">
+    <a href="#hero">Início</a>
+    <a href="#cardapio">Cardápio</a>
+    <a href="#sobre">Sobre</a>
+  </div>
+  <p class="footer-copy">&copy; 2026 Loucos por Brigadeiro. Todos os direitos reservados.</p>
+</footer>
+
+<a href="https://wa.me/5551989445101" target="_blank" class="whatsapp-fab" aria-label="Fale Conosco no WhatsApp">💬</a>
+
+<div class="cart-overlay" id="cartOverlay" onclick="toggleCart(false)"></div>
+<div class="cart-sidebar" id="cartSidebar">
+  <div class="cart-header">
+    <h3>Seu Carrinho</h3>
+    <button class="cart-close" onclick="toggleCart(false)">&times;</button>
+  </div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-footer-box">
+    <div class="summary-row">
+      <span>Subtotal</span>
+      <span id="cartSubtotal">R$ 0,00</span>
+    </div>
+    <div class="summary-row discount">
+      <span>Desconto Progressivo</span>
+      <span id="cartDiscount">-R$ 0,00</span>
+    </div>
+    <div class="summary-row total">
+      <span>Total</span>
+      <span id="cartTotal">R$ 0,00</span>
+    </div>
+    <button class="checkout-btn" id="checkoutBtn" onclick="openPixModal()" disabled>Avançar para o Pagamento 💳</button>
+  </div>
+</div>
+
+<div class="pix-modal-overlay" id="pixModalOverlay">
+  <div class="pix-modal">
+    <button class="pix-modal-close" onclick="closePixModal()">&times;</button>
+    <h4>Pagamento via PIX</h4>
+    <p>Escaneie o QR Code abaixo ou utilize o botão "Copiar Código PIX" para efetuar o pagamento seguro com valor fixado.</p>
+    
+    <div class="pix-amount-box">
+      <span class="pix-amount-label">Valor do seu pedido:</span>
+      <div class="pix-amount-val" id="pixModalTotal">R$ 0,00</div>
+    </div>
+    
+    <div class="qrcode-wrapper">
+      <div id="qrcodeContainer"></div>
+    </div>
+    
+    <button class="copy-btn" id="btnCopyPix">📋 Copiar Código PIX Copia e Cola</button>
+    <button class="pix-btn-wa" onclick="finishOrderWhatsApp()">Já Paguei! Enviar Comprovante no WhatsApp 💬</button>
+  </div>
+</div>
+
+<script>
+const WHATSAPP = "5551989445101";
+// Nova chave Pix definida pelo usuário
+const PIX_KEY = "60069012008";
+
+const PRODUCTS = [
+  { id: 'p1', name: 'Negrinho (Tradicional)', cat: 'tradicional', price: 2.50, emoji: '🍫', desc: 'O clássico de chocolate com granulado macio e massa ultra cremosa.' },
+  { id: 'p2', name: 'Beijinho', cat: 'tradicional', price: 3.00, emoji: '🥥', desc: 'Leite condensado com coco ralado fresco finalizado com açúcar cristal.' },
+  { id: 'p3', name: 'Maracujá Gourmet', cat: 'gourmet', price: 3.50, emoji: '🍋', desc: 'Brigadeiro gourmet com o toque azedinho e refrescante do fruto puro.' },
+  { id: 'p4', name: 'Churros Premium', cat: 'gourmet', price: 3.50, emoji: '🥮', desc: 'Massa de canela recheada com doce de leite artesanal na crosta de açúcar.' },
+  { id: 'p5', name: 'Ninho com Nutella', cat: 'gourmet', price: 4.00, emoji: '🌰', desc: 'Massa artesanal de Leite Ninho com recheio cremoso de creme de avelã puro.' }
+];
+
+let cart = {};
+let currentPixString = "";
+
+// ── INICIALIZAÇÃO DA VITRINE ──
+function initApp() {
+  const grid = document.getElementById('productsGrid');
+  if (grid) {
+    grid.innerHTML = PRODUCTS.map(p => `
+      <div class="card" data-cat="${p.cat}">
+        <div class="card-img">
+          <div class="card-img-bg" style="background: radial-gradient(circle at 50% 50%, #fff, var(--cream-dark));"></div>
+          <span class="card-emoji">${p.emoji}</span>
+        </div>
+        <div class="card-body">
+          <span class="card-tag">${p.cat}</span>
+          <h3 class="card-name">${p.name}</h3>
+          <p class="card-desc">${p.desc}</p>
+          <div class="card-promo">🎁 Lote de 5 unidades leva 20% OFF</div>
+          <div class="card-footer">
+            <div class="card-price">R$ ${p.price.toFixed(2).replace('.', ',')} <span>/un</span></div>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="updateQty('${p.id}', -1)">-</button>
+              <span class="qty-num" id="qty-${p.id}">0</span>
+              <button class="qty-btn" onclick="updateQty('${p.id}', 1)">+</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+  updateCartUI();
+}
+
+// ── GERENCIAMENTO DE QUANTIDADES ──
+function updateQty(id, change) {
+  cart[id] = (cart[id] || 0) + change;
+  if (cart[id] <= 0) delete cart[id];
+  
+  const el = document.getElementById(`qty-${id}`);
+  if (el) el.textContent = cart[id] || 0;
+  
+  updateCartUI();
+}
+
+// ── CALCULAR TOTAL E DESCONTOS DOS LOTES ──
+function calculateTotals() {
+  let subtotal = 0;
+  let discount = 0;
+  
+  Object.keys(cart).forEach(id => {
+    const p = PRODUCTS.find(prod => prod.id === id);
+    if (p) {
+      const q = cart[id];
+      subtotal += p.price * q;
+      
+      const lots = Math.floor(q / 5);
+      if (lots > 0) {
+        discount += lots * (p.price * 5) * 0.20;
+      }
+    }
+  });
+  
+  return {
+    subtotal: subtotal,
+    discount: discount,
+    total: Math.max(0, subtotal - discount)
+  };
+}
+
+// ── ATUALIZAÇÃO DA INTERFACE DO CARRINHO ──
+function updateCartUI() {
+  const totals = calculateTotals();
+  const itemsContainer = document.getElementById('cartItems');
+  let totalItems = 0;
+  
+  if (itemsContainer) {
+    const keys = Object.keys(cart);
+    if (keys.length === 0) {
+      itemsContainer.innerHTML = `
+        <div class="cart-empty">
+          <span>🛒</span>
+          <p>Seu carrinho está vazio.</p>
+        </div>
+      `;
+    } else {
+      itemsContainer.innerHTML = keys.map(id => {
+        const p = PRODUCTS.find(prod => prod.id === id);
+        const q = cart[id];
+        totalItems += q;
+        return `
+          <div class="cart-item">
+            <span class="item-emoji">${p.emoji}</span>
+            <div class="item-info">
+              <h4 class="item-name">${p.name}</h4>
+              <div class="item-price">R$ ${(p.price * q).toFixed(2).replace('.', ',')}</div>
+            </div>
+            <div class="qty-control">
+              <button class="qty-btn" onclick="updateQty('${p.id}', -1)">-</button>
+              <span class="qty-num">${q}</span>
+              <button class="qty-btn" onclick="updateQty('${p.id}', 1)">+</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+  }
+  
+  document.getElementById('cartBadge').textContent = totalItems;
+  document.getElementById('cartSubtotal').textContent = `R$ ${totals.subtotal.toFixed(2).replace('.', ',')}`;
+  document.getElementById('cartDiscount').textContent = `-R$ ${totals.discount.toFixed(2).replace('.', ',')}`;
+  document.getElementById('cartTotal').textContent = `R$ ${totals.total.toFixed(2).replace('.', ',')}`;
+  document.getElementById('checkoutBtn').disabled = totalItems === 0;
+}
+
+function toggleCart(open) {
+  document.getElementById('cartSidebar').classList.toggle('open', open);
+  document.getElementById('cartOverlay').classList.toggle('open', open);
+}
+
+// ── FLUXO DE PAGAMENTO E GERAÇÃO DO PIX DINÂMICO REAL COM VALOR EMBUTIDO ──
+function openPixModal() {
+  const totals = calculateTotals();
+  toggleCart(false);
+  
+  document.getElementById('pixModalTotal').textContent = `R$ ${totals.total.toFixed(2).replace('.', ',')}`;
+  document.getElementById('pixModalOverlay').classList.add('open');
+  
+  const container = document.getElementById('qrcodeContainer');
+  if (container) container.innerHTML = "";
+  
+  const valueString = totals.total.toFixed(2);
+  const merchantName = "LOUCOS POR BRIGADEIRO";
+  const merchantCity = "PORTO ALEGRE";
+  
+  // Montagem da estrutura EMV BR Code baseada na especificação do Banco Central do Brasil
+  const part1 = "00020101021226330014br.gov.bcb.pix0111" + PIX_KEY;
+  const part2 = "52040000530398654" + valueString.length.toString().padStart(2, '0') + valueString + "5802BR59" + merchantName.length.toString().padStart(2, '0') + merchantName + "60" + merchantCity.length.toString().padStart(2, '0') + merchantCity + "62070503***6304";
+  
+  const incompletePayload = part1 + part2;
+  const crc = calculateCRC16(incompletePayload);
+  
+  currentPixString = incompletePayload + crc;
+  
+  if (typeof QRCode !== "undefined" && container) {
+    new QRCode(container, {
+      text: currentPixString,
+      width: 200,
+      height: 200,
+      colorDark: "#3B1A08",
+      colorLight: "#FFFDF9",
+      correctLevel: QRCode.CorrectLevel.M
+    });
+  }
+}
+
+function closePixModal() {
+  document.getElementById('pixModalOverlay').classList.remove('open');
+}
+
+// Algoritmo Oficial de Verificação CRC16 CCITT (Padrão das transações Pix)
+function calculateCRC16(str) {
+  let crc = 0xFFFF;
+  for (let i = 0; i < str.length; i++) {
+    let b = str.charCodeAt(i);
+    for (let j = 0; j < 8; j++) {
+      let bit = ((b >> (7 - j)) & 1) === 1;
+      let c15 = ((crc >> 15) & 1) === 1;
+      crc <<= 1;
+      if (c15 ^ bit) crc ^= 0x1021;
+    }
+  }
+  crc = crc & 0xFFFF;
+  return crc.toString(16).toUpperCase().padStart(4, '0');
+}
+
+// ── ENVIO DO COMPROVANTE E FINALIZAÇÃO DO PEDIDO ──
+function getSummaryText() {
+  return Object.keys(cart).map(id => {
+    const p = PRODUCTS.find(prod => prod.id === id);
+    return `• ${cart[id]}x ${p.name} (R$ ${(p.price * cart[id]).toFixed(2).replace('.', ',')})`;
+  }).join('\n');
+}
+
+function finishOrderWhatsApp() {
+  const totals = calculateTotals();
+  let msg = `Olá! Acabei de realizar o meu pedido:\n\n`;
+  msg += `${getSummaryText()}\n\n`;
+  if (totals.discount > 0) {
+    msg += `*Desconto de Lote:* -R$ ${totals.discount.toFixed(2).replace('.', ',')}\n`;
+  }
+  msg += `*Total Pago:* R$ ${totals.total.toFixed(2).replace('.', ',')}\n\n`;
+  msg += `*Forma de Pagamento:* PIX Efetuado via QR Code Dinâmico!\n`;
+  msg += `Estou enviando em anexo o comprovante da transferência bancária.`;
+  
+  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`, '_blank');
+  closePixModal();
+  cart = {};
+  PRODUCTS.forEach(p => {
+    const el = document.getElementById(`qty-${p.id}`);
+    if (el) el.textContent = 0;
+  });
+  updateCartUI();
+}
+
+// ── FILTROS CARDÁPIO ──
+function filterCards(btn, cat) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.card').forEach(card => {
+    card.style.display = (cat === 'all' || card.dataset.cat === cat) ? '' : 'none';
+  });
+}
+
+// ── FORM CONTATO ──
+function handleSubmit(e) {
+  e.preventDefault();
+  const f = e.target;
+  const name = f.querySelector('input[type=text]').value;
+  const tel  = f.querySelector('input[type=tel]').value;
+  const msg  = f.querySelector('textarea').value;
+  const text = encodeURIComponent(`Olá! Sou *${name}* (${tel}).\n\n${msg}`);
+  window.open(`https://wa.me/${WHATSAPP}?text=${text}`, '_blank');
+}
+
+// Event Listener para o botão de copiar código Copia e Cola
+document.addEventListener('DOMContentLoaded', () => {
+  initApp();
+  
+  const btnCopy = document.getElementById('btnCopyPix');
+  if (btnCopy) {
+    btnCopy.addEventListener('click', () => {
+      if (!currentPixString) return;
+      navigator.clipboard.writeText(currentPixString).then(() => {
+        alert("Código PIX Copia e Cola copiado com sucesso!");
+      }).catch(() => {
+        alert("Não foi possível copiar automaticamente. Use o QR Code em tela.");
+      });
+    });
+  }
+});
+</script>
 </body>
 </html>
