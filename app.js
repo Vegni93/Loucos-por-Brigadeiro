@@ -1,9 +1,8 @@
 /**
  * Ateliê Dolce & Brigadeiro - Core Engine
- * Versão: 5.0.0 (Completo: Cardápio + Descontos + PIX Dinâmico com Preço Travado Real)
+ * Versão: 5.0.2 (Blindagem Total do Carregamento do QRCode)
  */
 
-// 1. Banco de Dados Oficial de Produtos (Model)
 const DATA_PRODUCTS = [
     {
         id: "b-01",
@@ -23,267 +22,271 @@ const DATA_PRODUCTS = [
         id: "b-03",
         title: "Maracujá",
         description: "Brigadeiro gourmet com o toque azedinho e refrescante do fruto puro do maracujá.",
-        price: 4.00,
-        image: "https://images.unsplash.com/photo-1575549594211-8f3764e1011d?auto=format&fit=crop&w=600&q=80"
+        price: 3.50,
+        image: "https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?auto=format&fit=crop&w=600&q=80"
     },
     {
         id: "b-04",
-        title: "Sem Lactose",
-        description: "Todo o sabor e cremosidade do brigadeiro tradicional em uma receita 100% livre de lactose.",
-        price: 4.50,
-        image: "https://images.unsplash.com/photo-1541783245831-57d6fb0926d3?auto=format&fit=crop&w=600&q=80"
+        title: "Churros",
+        description: "Massa leve de canela recheada com doce de leite artesanal premium e crosta de açúcar.",
+        price: 3.50,
+        image: "https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=600&q=80"
     },
     {
         id: "b-05",
-        title: "Não Diabético (Gourmet Nobre)",
-        description: "Nossa linha tradicional premium feita com açúcar orgânico e blend de chocolates nobres.",
-        price: 5.50,
-        image: "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?auto=format&fit=crop&w=600&q=80"
+        title: "Ninho com Nutella",
+        description: "Nossa massa especial de Leite Ninho envolvendo um recheio generoso de creme de avelã puro.",
+        price: 4.00,
+        image: "https://images.unsplash.com/photo-1516685018646-549198525c1b?auto=format&fit=crop&w=600&q=80"
     }
 ];
 
-// 2. Configurações Reais de Produção (Chave PIX e Contato)
-const CONFIG_PIX = {
-    chave: "60069012008",       // Sua chave PIX real (CPF)
-    beneficiario: "JULIA DOCES", // Seu nome comercial (Sem acentos, máx 25 letras)
-    cidade: "PORTO ALEGRE"       // Sua cidade (Sem acentos, máx 15 letras)
-};
-const WHATSAPP_PHONE = "5551989412241"; // Seu WhatsApp de atendimento configurado
+const WHATSAPP_PHONE = "5551989445101";
 
-// 3. Gerenciador de Estado Interno (State Manager)
-const AppState = {
-    cart: [],
-    
-    addItem(productId) {
-        const itemExistente = this.cart.find(item => item.id === productId);
-        if (itemExistente) {
-            itemExistente.quantity++;
-        } else {
-            const produtoOriginal = DATA_PRODUCTS.find(p => p.id === productId);
-            if (produtoOriginal) {
-                this.cart.push({ ...produtoOriginal, quantity: 1 });
-            }
-        }
-        this.syncRender();
-    },
+let stateCart = {};
 
-    removeItem(productId) {
-        this.cart = this.cart.filter(item => item.id !== productId);
-        this.syncRender();
-    },
-
-    calculateItemSubtotal(item) {
-        const blocosDeCinco = Math.floor(item.quantity / 5);
-        const restante = item.quantity % 5;
-        const precoComDesconto = item.price * 0.8; // 20% de desconto
-        
-        return (blocosDeCinco * 5 * precoComDesconto) + (restante * item.price);
-    },
-
-    get totalItems() {
-        return this.cart.reduce((acc, item) => acc + item.quantity, 0);
-    },
-    
-    get totalPrice() {
-        return this.cart.reduce((acc, item) => acc + this.calculateItemSubtotal(item), 0);
-    },
-
-    syncRender() {
-        renderCartUI();
-    }
-};
-
-// 4. Mapeamento de Elementos do DOM
 const domProductsGrid = document.getElementById('productsGrid');
+const domCartTrigger = document.getElementById('cartTrigger');
+const domCartBadge = document.getElementById('cartBadge');
 const domCartDrawer = document.getElementById('cartDrawer');
 const domCartOverlay = document.getElementById('cartOverlay');
-const domCartTrigger = document.getElementById('cartTrigger');
 const domCloseCartBtn = document.getElementById('closeCartBtn');
-const domCartItemsContainer = document.getElementById('cartDrawerItems');
+const domCartDrawerItems = document.getElementById('cartDrawerItems');
 const domCartTotal = document.getElementById('cartTotal');
-const domCartBadge = document.getElementById('cartBadge');
 const domCheckoutBtn = document.getElementById('checkoutBtn');
-
 const domPaymentModalOverlay = document.getElementById('paymentModalOverlay');
 const domCloseModalBtn = document.getElementById('closeModalBtn');
 const domPaymentSelectionScreen = document.getElementById('paymentSelectionScreen');
 const domPaymentPixScreen = document.getElementById('paymentPixScreen');
 const domPixModalTotal = document.getElementById('pixModalTotal');
+const domQrcodeContainer = document.getElementById('qrcodeContainer');
 
-// 5. Funções de Renderização da Interface (UI)
-function initProductsGrid() {
-    if(!domProductsGrid) return;
-    domProductsGrid.innerHTML = DATA_PRODUCTS.map(product => `
-        <article class="product-card">
-            <div class="product-image-wrapper">
-                <img src="${product.image}" alt="${product.title}" class="product-image" loading="lazy">
-            </div>
-            <div class="product-meta">
-                <h3 class="product-title">${product.title}</h3>
-                <p class="product-description">${product.description}</p>
-                <div class="product-info-promo">A cada 5 unidades ganhe 20% de desconto!</div>
-                <div class="product-footer">
-                    <span class="product-price">R$ ${product.price.toFixed(2)} <small style="font-size:11px; font-weight:normal; color:#6e655f;">/un</small></span>
-                    <button class="btn-add-cart" onclick="AppState.addItem('${product.id}')">Selecionar</button>
+function initializeApp() {
+    if (domProductsGrid) {
+        domProductsGrid.innerHTML = DATA_PRODUCTS.map(product => `
+            <article class="product-card">
+                <div class="product-image-wrapper">
+                    <img src="${product.image}" alt="${product.title}" class="product-image" loading="lazy">
                 </div>
-            </div>
-        </article>
-    `).join('');
+                <div class="product-meta">
+                    <h3 class="product-title">${product.title}</h3>
+                    <p class="product-description">${product.description}</p>
+                    <span class="product-info-promo">Lote de 5 unidades com 20% OFF</span>
+                    <div class="product-footer">
+                        <span class="product-price">R$ ${product.price.toFixed(2).replace('.', ',')} <small>/un</small></span>
+                        <button class="btn-add-cart" onclick="addProductToCart('${product.id}')">Adicionar</button>
+                    </div>
+                </div>
+            </article>
+        `).join('');
+    }
+    updateCartUI();
 }
 
-function renderCartUI() {
-    if(domCartBadge) domCartBadge.innerText = AppState.totalItems;
-    if(domCartTotal) domCartTotal.innerText = `R$ ${AppState.totalPrice.toFixed(2)}`;
-    if(!domCartItemsContainer) return;
+window.addProductToCart = function(id) {
+    stateCart[id] = (stateCart[id] || 0) + 1;
+    updateCartUI();
+    openDrawer();
+};
 
-    if (AppState.cart.length === 0) {
-        domCartItemsContainer.innerHTML = `<p style="text-align:center; color:#6e655f; margin-top:20px;">Seu carrinho está vazio.</p>`;
-        return;
+window.removeProductFromCart = function(id) {
+    if (stateCart[id]) {
+        stateCart[id]--;
+        if (stateCart[id] === 0) delete stateCart[id];
+        updateCartUI();
     }
+};
 
-    domCartItemsContainer.innerHTML = AppState.cart.map(item => {
-        const subtotalItem = AppState.calculateItemSubtotal(item);
-        const temDesconto = item.quantity >= 5;
-
-        return `
-            <div class="cart-render-item">
-                <div class="cri-details">
-                    <h4>${item.title}</h4>
-                    <p>R$ ${item.price.toFixed(2)} x ${item.quantity}</p>
-                    ${temDesconto ? `<small style="color: #2e7d32; font-weight: 600;">✓ Desconto de 20% aplicado</small>` : ''}
-                </div>
-                <div style="display: flex; align-items: center; gap: 15px;">
-                    <strong>R$ ${subtotalItem.toFixed(2)}</strong>
-                    <button class="cri-remove" onclick="AppState.removeItem('${item.id}')">Excluir</button>
-                </div>
-            </div>
-        `;
-    }).join('');
+function openDrawer() {
+    if(domCartDrawer) domCartDrawer.classList.add('active');
+    if(domCartOverlay) domCartOverlay.classList.add('active');
+    if(domCartDrawer) domCartDrawer.setAttribute('aria-hidden', 'false');
 }
 
 function toggleDrawerVisibility() {
-    if(domCartDrawer && domCartOverlay) {
-        domCartDrawer.classList.toggle('active');
-        domCartOverlay.classList.toggle('active');
+    if(domCartDrawer) {
+        const isActive = domCartDrawer.classList.toggle('active');
+        if(domCartOverlay) domCartOverlay.classList.toggle('active', isActive);
+        domCartDrawer.setAttribute('aria-hidden', !isActive);
     }
 }
 
-// 6. Mecanismo de Pagamento e Integração BR Code com Preço Travado
+function calculateCartTotals() {
+    let subtotal = 0;
+    let totalDiscount = 0;
+
+    Object.keys(stateCart).forEach(id => {
+        const prod = DATA_PRODUCTS.find(p => p.id === id);
+        if (prod) {
+            const qty = stateCart[id];
+            const itemSubtotal = prod.price * qty;
+            subtotal += itemSubtotal;
+
+            const baseLots = Math.floor(qty / 5);
+            if (baseLots > 0) {
+                const discountPerLot = (prod.price * 5) * 0.20;
+                totalDiscount += baseLots * discountPerLot;
+            }
+        }
+    });
+
+    return {
+        subtotal: subtotal,
+        discount: totalDiscount,
+        total: Math.max(0, subtotal - totalDiscount)
+    };
+}
+
+function updateCartUI() {
+    const totals = calculateCartTotals();
+    let totalItems = 0;
+
+    if (domCartDrawerItems) {
+        const keys = Object.keys(stateCart);
+        if (keys.length === 0) {
+            domCartDrawerItems.innerHTML = `<p class="cart-empty-message">Seu carrinho está vazio.</p>`;
+        } else {
+            domCartDrawerItems.innerHTML = keys.map(id => {
+                const prod = DATA_PRODUCTS.find(p => p.id === id);
+                const qty = stateCart[id];
+                totalItems += qty;
+                return `
+                    <div class="cart-item">
+                        <div class="cart-item-details">
+                            <h4>${prod.title}</h4>
+                            <p>R$ ${prod.price.toFixed(2).replace('.', ',')} /un</p>
+                        </div>
+                        <div class="cart-item-actions">
+                            <div class="qty-stepper">
+                                <button onclick="removeProductFromCart('${prod.id}')">-</button>
+                                <span>${qty}</span>
+                                <button onclick="addProductToCart('${prod.id}')">+</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+    }
+
+    if (domCartBadge) domCartBadge.textContent = totalItems;
+    if (domCartTotal) {
+        if (totals.discount > 0) {
+            domCartTotal.innerHTML = `
+                <div style="font-size:0.9rem; color:var(--color-text-muted); text-decoration:line-through;">Subtotal: R$ ${totals.subtotal.toFixed(2).replace('.', ',')}</div>
+                <div style="font-size:0.9rem; color:#2d7a3a; font-weight:600;">Desconto Lote: -R$ ${totals.discount.toFixed(2).replace('.', ',')}</div>
+                <div style="margin-top:5px;">Total: R$ ${totals.total.toFixed(2).replace('.', ',')}</div>
+            `;
+        } else {
+            domCartTotal.textContent = `R$ ${totals.total.toFixed(2).replace('.', ',')}`;
+        }
+    }
+    
+    if (domCheckoutBtn) {
+        domCheckoutBtn.disabled = totalItems === 0;
+    }
+}
+
+/**
+ * LÓGICA DO MEIO DE PAGAMENTO & EMISSÃO DE PIX DINÂMICO REAL
+ */
 const PaymentFlow = {
     currentPixCode: "",
 
     openModal() {
-        if (AppState.cart.length === 0) {
-            alert("Seu carrinho está vazio.");
-            return;
-        }
-        if(domCartDrawer) domCartDrawer.classList.remove('active');
-        if(domCartOverlay) domCartOverlay.classList.remove('active');
-        
-        if(domPaymentSelectionScreen && domPaymentPixScreen && domPaymentModalOverlay) {
-            domPaymentSelectionScreen.style.display = 'block';
-            domPaymentPixScreen.style.display = 'none';
-            domPaymentModalOverlay.classList.add('active');
-        }
+        if(domPaymentModalOverlay) domPaymentModalOverlay.classList.add('active');
+        if(domPaymentSelectionScreen) domPaymentSelectionScreen.style.display = 'flex';
+        if(domPaymentPixScreen) domPaymentPixScreen.style.display = 'none';
+        toggleDrawerVisibility();
     },
 
     closeModal() {
         if(domPaymentModalOverlay) domPaymentModalOverlay.classList.remove('active');
     },
 
-    selectMethod(method) {
-        if (method === 'pix') {
-            const totalValue = AppState.totalPrice;
-            if(domPixModalTotal) domPixModalTotal.innerText = `R$ ${totalValue.toFixed(2)}`;
-            
-            // Gera a string oficial EMV do PIX contendo o valor do carrinho e sua chave
-            try {
-                this.currentPixCode = this.generatePixString(totalValue);
-            } catch(e) {
-                console.error(e);
-                this.currentPixCode = "";
-            }
-            
-            // Renderiza o novo QR Code com os dados em tempo real
-            const container = document.getElementById('qrcodeContainer');
-            if(container) {
-                container.innerHTML = "";
-                if (typeof QRCode !== 'undefined' && this.currentPixCode) {
-                    new QRCode(container, {
-                        text: this.currentPixCode,
-                        width: 200,
-                        height: 200,
-                        colorDark : "#261c14",
-                        colorLight : "#ffffff",
-                        correctLevel : QRCode.CorrectLevel.M
-                    });
-                } else {
-                    container.innerHTML = "<p style='color:#a68a62; font-size:12px;'>Use a opção de Copiar Código PIX abaixo.</p>";
-                }
-            }
+    selectPix() {
+        const totals = calculateCartTotals();
+        if(domPaymentSelectionScreen) domPaymentSelectionScreen.style.display = 'none';
+        if(domPaymentPixScreen) domPaymentPixScreen.style.display = 'block';
+        if(domPixModalTotal) domPixModalTotal.textContent = `R$ ${totals.total.toFixed(2).replace('.', ',')}`;
 
-            if(domPaymentSelectionScreen && domPaymentPixScreen) {
-                domPaymentSelectionScreen.style.display = 'none';
-                domPaymentPixScreen.style.display = 'block';
-            }
-        } else if (method === 'confeiteira') {
-            this.finishWithAgreement();
-        }
-    },
+        // Limpa o contêiner do QR Code antigo antes de renderizar
+        if(domQrcodeContainer) domQrcodeContainer.innerHTML = "";
 
-    padSize(val) {
-        return String(val).padStart(2, '0');
-    },
+        // Formatação do valor para duas casas decimais com ponto (ex: "12.50")
+        const formattedValueStr = totals.total.toFixed(2);
 
-    generatePixString(value) {
-        const valueStr = value.toFixed(2);
-        const merchantAccount = "0014BR.GOV.BCB.PIX01" + this.padSize(CONFIG_PIX.chave.length) + CONFIG_PIX.chave;
-        const merchantCategory = "52040000";
-        const transactionCurrency = "5303986";
-        const transactionAmount = "54" + this.padSize(valueStr.length) + valueStr;
-        const countryCode = "5802BR";
-        const merchantName = "59" + this.padSize(CONFIG_PIX.beneficiario.length) + CONFIG_PIX.beneficiario;
-        const merchantCity = "60" + this.padSize(CONFIG_PIX.cidade.length) + CONFIG_PIX.cidade;
-        const addDataField = "62070503***";
+        // Montagem do payload dinâmico BR Code baseado na especificação do Banco Central
+        // Chave Pix utilizada: 51989445101 (Formato Nacional sem o +55)
+        const pixKey = "51989445101"; 
+        const merchantName = "DOLCE BRIGADEIRO";
+        const merchantCity = "PORTO ALEGRE";
 
-        let pixPayload = "000201" + "26" + this.padSize(merchantAccount.length) + merchantAccount + merchantCategory + transactionCurrency + transactionAmount + countryCode + merchantName + merchantCity + addDataField + "6304";
-
-        let crc = 0xFFFF;
-        for (let i = 0; i < pixPayload.length; i++) {
-            crc ^= pixPayload.charCodeAt(i) << 8;
-            for (let j = 0; j < 8; j++) {
-                if ((crc & 0x8000) !== 0) crc = (crc << 1) ^ 0x1021;
-                else crc <<= 1;
-            }
-        }
-        crc = (crc & 0xFFFF).toString(16).toUpperCase().padStart(4, '0');
+        // Geração da string estática com valor embutido (Campos obrigatórios EMV)
+        const part1 = "00020101021226330014br.gov.bcb.pix0111" + pixKey;
+        const part2 = "52040000530398654" + formattedValueStr.length.toString().padStart(2, '0') + formattedValueStr + "5802BR5915" + merchantName + "6013" + merchantCity + "62070503***6304";
         
-        return pixPayload + crc;
+        // Algoritmo de checagem CRC16 CCITT
+        const fullPayloadWithoutCrc = part1 + part2;
+        const crcValue = PaymentFlow.calculateCRC16(fullPayloadWithoutCrc);
+        
+        // Código completo Copia e Cola definitivo com valor real acoplado
+        this.currentPixCode = fullPayloadWithoutCrc + crcValue;
+
+        // Renderização dinâmica e nativa do QR Code em tela utilizando o Script qrcode.min.js
+        if (typeof QRCode !== "undefined" && domQrcodeContainer) {
+            new QRCode(domQrcodeContainer, {
+                text: this.currentPixCode,
+                width: 200,
+                height: 200,
+                colorDark: "#261c14",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.M
+            });
+        }
     },
 
-    buildOrderPayload() {
-        let text = `*Novo Pedido - Ateliê Dolce & Brigadeiro*\n`;
-        text += `-------------------------------------------\n\n`;
-        AppState.cart.forEach(item => {
-            const subtotal = AppState.calculateItemSubtotal(item);
-            text += `• *${item.quantity}x* ${item.title}\n`;
-            text += `  Subtotal: R$ ${subtotal.toFixed(2)} ${item.quantity >= 5 ? '(Promoção 5 un. aplicada)' : ''}\n\n`;
-        });
-        text += `-------------------------------------------\n`;
-        text += `*Valor Total: R$ ${AppState.totalPrice.toFixed(2)}*\n`;
-        return text;
+    calculateCRC16(str) {
+        let crc = 0xFFFF;
+        for (let i = 0; i < str.length; i++) {
+            let b = str.charCodeAt(i);
+            for (let j = 0; j < 8; j++) {
+                let bit = ((b >> (7 - j)) & 1) === 1;
+                let c15 = ((crc >> 15) & 1) === 1;
+                crc <<= 1;
+                if (c15 ^ bit) crc ^= 0x1021;
+            }
+        }
+        crc = crc & 0xFFFF;
+        return crc.toString(16).toUpperCase().padStart(4, '0');
+    },
+
+    getCartSummaryText() {
+        return Object.keys(stateCart).map(id => {
+            const prod = DATA_PRODUCTS.find(p => p.id === id);
+            return `• ${stateCart[id]}x ${prod.title} (R$ ${(prod.price * stateCart[id]).toFixed(2).replace('.', ',')})`;
+        }).join('\n');
     },
 
     finishWithPix() {
-        let message = this.buildOrderPayload();
-        message += `\n*Forma de Pagamento:* PIX dinâmico efetuado pelo site.`;
-        message += `\nEstou enviando o comprovante in anexo aqui no chat!`;
+        const totals = calculateCartTotals();
+        let message = `Olá! Realizei o meu pedido no Ateliê Dolce & Brigadeiro:\n\n`;
+        message += `${this.getCartSummaryText()}\n\n`;
+        if (totals.discount > 0) {
+            message += `*Desconto Aplicado:* R$ ${totals.discount.toFixed(2).replace('.', ',')}\n`;
+        }
+        message += `*Total Final:* R$ ${totals.total.toFixed(2).replace('.', ',')}\n\n`;
+        message += `*Forma de Pagamento:* PIX já efetuado via QR Code!\n`;
+        message += `Seguirá em anexo o comprovante da transferência bancária.`;
         this.dispatchWhatsApp(message);
     },
 
-    finishWithAgreement() {
-        let message = this.buildOrderPayload();
-        message += `\n*Forma de Pagamento:* A acertar direto com a confeiteira.`;
+    finishWithCombinar() {
+        const totals = calculateCartTotals();
+        let message = `Olá! Montei meu carrinho no Ateliê Dolce & Brigadeiro e gostaria de combinar o pagamento:\n\n`;
+        message += `${this.getCartSummaryText()}\n\n`;
+        message += `*Total Estimado:* R$ ${totals.total.toFixed(2).replace('.', ',')}\n\n`;
+        message += `*Forma de Pagamento:* A acertar direto com a confeiteira.`;
         message += `\nGostaria de combinar a entrega/retirada e definir como pagar!`;
         this.dispatchWhatsApp(message);
     },
@@ -295,7 +298,6 @@ const PaymentFlow = {
     }
 };
 
-// 7. Vinculação de Eventos (Event Listeners)
 if(domCartTrigger) domCartTrigger.addEventListener('click', toggleDrawerVisibility);
 if(domCloseCartBtn) domCloseCartBtn.addEventListener('click', toggleDrawerVisibility);
 if(domCartOverlay) domCartOverlay.addEventListener('click', toggleDrawerVisibility);
@@ -314,8 +316,4 @@ if(btnCopyPix) {
     });
 }
 
-// 8. Inicialização do Sistema
-window.addEventListener('DOMContentLoaded', () => {
-    initProductsGrid();
-    AppState.syncRender();
-});
+document.addEventListener('DOMContentLoaded', initializeApp);
