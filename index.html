@@ -395,47 +395,6 @@ section { padding: 6rem 3rem; }
 .val-text strong { display: block; font-size: .92rem; font-weight: 800; color: var(--choco); margin-bottom: .12rem; }
 .val-text p { font-size: .82rem; color: var(--muted); font-weight: 600; }
 
-/* ─── DEPOIMENTOS ─── */
-#depoimentos {
-  background: var(--choco);
-  position: relative; overflow: hidden;
-}
-#depoimentos::before {
-  content: '❤️';
-  position: absolute; right: 3rem; top: 3rem;
-  font-size: 8rem; opacity: .06; pointer-events: none;
-}
-#depoimentos .sec-label { color: var(--rose); }
-#depoimentos .sec-label::before { background: var(--rose); }
-#depoimentos .sec-title { color: var(--cream); }
-#depoimentos .sec-desc { color: rgba(253,240,226,.6); }
-
-.depo-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-  gap: 1.25rem; margin-top: 3rem;
-}
-.depo {
-  background: rgba(255,255,255,.06);
-  border: 1.5px solid rgba(255,255,255,.1);
-  border-radius: var(--r-lg); padding: 1.6rem;
-  transition: background .2s, transform .2s;
-}
-.depo:hover { background: rgba(255,255,255,.1); transform: translateY(-4px); }
-.depo-stars { color: #FFCF6B; font-size: .95rem; margin-bottom: .85rem; letter-spacing: .08em; }
-.depo-text {
-  font-size: .95rem; color: rgba(254,248,240,.82); line-height: 1.7;
-  font-weight: 600; font-style: italic; margin-bottom: 1.2rem;
-}
-.depo-author { display: flex; align-items: center; gap: .7rem; }
-.depo-av {
-  width: 42px; height: 42px; border-radius: 50%;
-  background: var(--rose); display: flex; align-items: center;
-  justify-content: center; font-size: 1.1rem;
-  border: 2px solid rgba(255,255,255,.15);
-}
-.depo-name { font-size: .88rem; font-weight: 800; color: var(--cream); }
-.depo-city { font-size: .75rem; color: rgba(254,248,240,.42); font-weight: 600; }
-
 /* ─── PEDIDO ─── */
 #pedido { background: var(--cream-3); position: relative; overflow: hidden; }
 #pedido::before {
